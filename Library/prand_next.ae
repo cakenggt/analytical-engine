@@ -1,0 +1,53 @@
+
+    Pseudorandom sequence generator
+          Return Next Value
+
+    Update generator 1
+    
+×
+L220	    	    . Multiply by factor 1
+L212
+S217'
+S218
+
+÷
+L217'	    	    . Divide by modulus 1
+L218
+L213
+S220	    	    . Store remainder in gen1
+
+    Update generator 2
+    
+×
+L221	    	    . Multiply by factor 2
+L214
+S217'
+S218
+
+÷
+L217'	    	    . Divide by modulus 1
+L218
+L215
+S221	    	    . Store remainder in gen2
+
+
+    Combine generators modulo generator 1
+
++
+L220	    	    . temp1 = gen1 + gen2
+L221
+S217
+
+÷
+L217	    	    . temp2 = temp1 % mod1
+L213
+S218
+
+    Scale the result to a fixed point value between 0 and 1
+    
+÷
+L218
+<
+L213
+S000'
+

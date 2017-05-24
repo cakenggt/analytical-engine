@@ -1,0 +1,79 @@
+
+    Pseudorandom sequence generator
+            Initialisation
+    
+    Seed for the generator is passed in N000
+    
+
+    Constants
+
+N212 40014  	    . Multiplicative factor 1
+N213 2147483563     . Modulus 1
+N214 40692  	    . Multiplicative factor 2
+N215 2147483399     . Modulus 2
+N216 2147483648     . 2^31
+N219 1	    	    . Constant 1
+
+    Variables
+ N210               . Seed for generator 1
+ N217	    	    . temp1
+ N218	    	    . temp2    
+ N220	    	    . gen1
+ N221	    	    . gen2
+N224 19     	    . Values to burn during initialisation
+N225 0	    	    . Initialisation burn counter
+ 
+    Return value
+    
+ N000	    	    . Pseudorandom value
+ 
+    Initialisation
+ 
+÷
+L000	    	    . Take seed mod 2^31
+L216
+S210	    	    . Set initial generator values to seed
+S220
+S221
+
+(?
+
+    Update generator 1
+    
+×
+L220	    	    . Multiply by factor 1
+L212
+S217'
+S218
+
+÷
+L217'	    	    . Divide by modulus 1
+L218
+L213
+S220	    	    . Store remainder in gen1
+
+    Update generator 2
+    
+×
+L221	    	    . Multiply by factor 2
+L214
+S217'
+S218
+
+÷
+L217'	    	    . Divide by modulus 1
+L218
+L215
+S221	    	    . Store remainder in gen2
+
+    Loop for requested number of burned values
+
++
+L225                . Increment iteration count
+L219
+S225
+
+−
+L225                . Test if number of iterations reached
+L224
+)
