@@ -72,13 +72,13 @@ Mill.prototype.currentOperationString = function() {
       s = "+";
       break;
     case definitions.OP_SUBTRACT:
-      s = C_minus;
+      s = definitions.C_minus;
       break;
     case definitions.OP_MULTIPLY:
-      s = C_times;
+      s = definitions.C_times;
       break;
     case definitions.OP_DIVIDE:
-      s = C_divide;
+      s = definitions.C_divide;
       break;
   }
   return s;
@@ -97,20 +97,20 @@ Mill.prototype.setOperation = function(which) {
       this.opargs = 2;
       break;
 
-    case C_minus:
+    case definitions.C_minus:
     case "-":
       this.operation = definitions.OP_SUBTRACT;
       this.opargs = 2;
       break;
 
-    case C_times:
+    case definitions.C_times:
     case "*":
     case "x":
       this.operation = definitions.OP_MULTIPLY;
       this.opargs = 2;
       break;
 
-    case C_divide:
+    case definitions.C_divide:
     case "/":
       this.operation = definitions.OP_DIVIDE;
       this.opargs = 2;
@@ -197,7 +197,7 @@ Mill.prototype.crank = function() {
       /* Check for passage through negative infinity
                    (borrow) and set run up and trim value as a
                    result. */
-      if (result.compare(Km10e50) <= 0) {
+      if (result.compare(definitions.Km10e50) <= 0) {
         this.run_up = true;
         result = bigInt.zero.subtract(result.add(definitions.K10e50));
       } else if (
@@ -246,7 +246,7 @@ Mill.prototype.crank = function() {
           "Mill:  " +
             this.ingress[0].toString() +
             " " +
-            C_times +
+            definitions.C_times +
             " " +
             this.ingress[1].toString() +
             " = " +

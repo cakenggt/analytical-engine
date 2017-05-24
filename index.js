@@ -8,54 +8,63 @@ const Program = require('./scripts/program');
 const Store = require('./scripts/store');
 const Engine = require('./scripts/engine');
 
-// Annunciator
-var ann = new Annunciator();
+exports.Annunciator = Annunciator;
+exports.Timing = Timing;
+exports.Printer = Printer;
+exports.CurveDrawingApparatus = CurveDrawingApparatus;
+exports.Attendant = Attendant;
+exports.Mill = Mill;
+exports.Program = Program;
+exports.Store = Store;
+exports.Engine = Engine;
 
-//  Timing
-var tim = new Timing();
+function Interface() {
+	// Annunciator
+	this.annunciator = new Annunciator();
 
-//  Printer
-var prt = new Printer();
+	//  Timing
+	this.timing = new Timing();
 
-//  Curve Drawing Apparatus
-var cda = new CurveDrawingApparatus();
+	//  Printer
+	this.printer = new Printer();
 
-//  Attendant
-var att = new Attendant(ann, tim);
-att.setLibraryTemplate("Library/$.ae");
+	//  Curve Drawing Apparatus
+	this.curveDrawingApparatus = new CurveDrawingApparatus();
 
-//  Mill
-var mill = new Mill(ann, att, tim);
+	//  Attendant
+	this.attendant = new Attendant(this.annunciator, this.timing);
+	this.attendant.setLibraryTemplate("Library/$.ae");
 
-//  Card Reader
-var cr = new Program.CardReader(ann, att, tim);
+	//  Mill
+	this.mill = new Mill(this.annunciator, this.attendant, this.timing);
 
-//  Store
-var sto = new Store(ann, att, tim);
+	//  Card Reader
+	this.cardReader = new Program.CardReader(this.annunciator, this.attendant, this.timing);
 
-//  Engine
-var eng = new Engine(ann, att, mill, sto, cr, prt, cda);
+	//  Store
+	this.store = new Store(this.annunciator, this.attendant, this.timing);
 
-var cards = `
-N000 1
-N001 2
-+
-L000
-L001
-S002
-`;
+	//  Engine
+	this.engine = new Engine(this.annunciator, this.attendant, this.mill, this.store, this.cardReader, this.printer, this.curveDrawingApparatus);
+}
 
-//  Analyst's Program
-var prog = new Program.Program(cards, att, cr, sto, cda, tim, eng);
+Interface.prototype.clearState = function() {
+	this.engine.commence();
+}
 
-prog.submit0(true);
-prog.submit1(true);
-ann.setOverride(true);
-eng.start();
-ann.setOverride(false);
-while(eng.processCard()) {}
-ann.setOverride(true);
-eng.halt();
-ann.setOverride(false);
+Interface.prototype.submitProgram = function(cards) {
+	this.prog = new Program.Program(cards, this.attendant, this.cardReader, this.store, this.curveDrawingApparatus, this.timing, this.engine);
+}
 
-console.log(sto.rack);
+Interface.prototype.runToCompletion = function() {
+	this.prog.submit();
+	this.annunciator.setOverride(true);
+	this.engine.start();
+	this.annunciator.setOverride(false);
+	while(this.engine.processCard()) {}
+	this.annunciator.setOverride(true);
+	this.engine.halt();
+	this.annunciator.setOverride(false);
+}
+
+exports.Interface = Interface;

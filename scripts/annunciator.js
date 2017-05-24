@@ -4,7 +4,6 @@
 
 function Annunciator() {
   this.L_output = "";
-  this.A_panel = "";
   this.M_ingress = [];
   this.M_egress = [];
   this.M_op = "";

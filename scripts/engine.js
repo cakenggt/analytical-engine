@@ -54,6 +54,13 @@ Engine.prototype.start = function() {
   this.panel.changeMillRunning((this.running = true));
 };
 
+// Runs to completion
+Engine.prototype.runToCompletion = function() {
+	this.start();
+	while(this.processCard()) {}
+	this.halt();
+}
+
 //  Stop the engine
 Engine.prototype.halt = function() {
   this.panel.changeMillRunning((this.running = false));

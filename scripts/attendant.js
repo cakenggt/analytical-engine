@@ -435,7 +435,7 @@ Attendant.prototype.expandLibraryRequests = function(start) {
         this.libLoadI = i;
         this.libLoadStatus = 1;
         try {
-          var text = fs.readFileSync(path.resolve("./" + url), {
+          var text = fs.readFileSync(path.join(__dirname, '..', url), {
             encoding: "utf8"
           });
           var lines = text.split("\n");
@@ -472,7 +472,7 @@ Attendant.prototype.expandLibraryRequests = function(start) {
         } catch (e) {
           this.complain(
             this.cardChain[this.libLoadI],
-            "Cannot load cards from library " + url + ", status " + status + "."
+            "Cannot load cards from library " + url + ", error " + e + "."
           );
           this.libLoadStatus = 2; // Mark library load failed
         }
@@ -486,6 +486,54 @@ Attendant.prototype.expandLibraryRequests = function(start) {
         );
         this.libLoadStatus = 2; // Mark library load failed
       }
+    } else if (this.cardChain[i].text.match(/^a include cards /i)) {
+      this.lspec = this.cardChain[i].text.substr(16);
+      var url = this.lspec;
+      this.libLoadI = i;
+      this.libLoadStatus = 1;
+      try {
+        var text = fs.readFileSync(path.join('.', url), {
+          encoding: "utf8"
+        });
+        var lines = text.split("\n");
+        this.cardChain.splice(
+          this.libLoadI,
+          1,
+          new Card(
+            ". Begin interpolation of " +
+              this.lspec +
+              " from library by attendant",
+            -1,
+            this.Source
+          )
+        );
+        var n = this.libLoadI + 1;
+        var src = new CardSource(this.lspec + " [Library]", 0);
+        for (var j = 0; j < lines.length; j++) {
+          this.cardChain.splice(n, 0, new Card(lines[j], j, src));
+          n++;
+        }
+        this.cardChain.splice(
+          n,
+          0,
+          new Card(
+            ". End interpolation of " +
+              this.lspec +
+              " from library by attendant",
+            -1,
+            this.Source
+          )
+        );
+        this.ncards = this.cardChain.length;
+        this.libLoadStatus = 0; // Set library load idle
+      } catch (e) {
+        this.complain(
+          this.cardChain[this.libLoadI],
+          "Cannot load cards from library " + url + ", error " + e + "."
+        );
+        this.libLoadStatus = 2; // Mark library load failed
+      }
+      break; // Quit loop to wait for callback
     }
   }
   return this.libLoadStatus;

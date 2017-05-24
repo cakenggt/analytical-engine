@@ -4,11 +4,14 @@
   "description": "Babbage's Analytic Engine emulator",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/test.js"
   },
   "author": "Alec Lownes and John Walker",
   "license": "ISC",
   "dependencies": {
     "big-integer": "^1.6.22"
+  },
+  "devDependencies": {
+    "tape": "^4.6.3"
   }
 }

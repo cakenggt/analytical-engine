@@ -46,6 +46,29 @@ Program.prototype.submit1 = function(comments) {
   return stat; // Return indication of pending library load
 };
 
+/*  Submit the contents of the Analyst's Program by
+        passing lines to the attendant to be appended to
+        the card chain. */
+Program.prototype.submit = function(comments) {
+  this.attendant.newCardChain();
+  var lines = this.cards.split("\n");
+  for (var i = 0; i < lines.length; i++) {
+    this.attendant.appendCard(lines[i], "Analyst", 0);
+  }
+  var stat = this.attendant.expandLibraryRequests(0);
+  if (stat != 1) {
+    this.attendant.examineCards(comments);
+    this.cardreader.mountCards(this.attendant.deliverCardChain());
+    //	    this.attendant.restart(); 	// Reset attendant modes to start
+    this.engine.reset(); // Reset the engine
+    this.engine.commence(); // Set up to run a new chain of cards
+    //	    this.store.reset();     	// Clear the store
+    //	    this.curvedraw.changePaper(); // Change paper in curve drawing apparatus
+    this.timing.reset(); // Reset timing
+  }
+  return stat; // Return indication of pending library load
+}
+
 //  A single card
 
 function Card(s, i, si) {
