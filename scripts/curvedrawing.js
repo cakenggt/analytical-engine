@@ -81,7 +81,7 @@ CurveDrawingApparatus.prototype.printScreen = function() {
         this.currentPen = ncol[1];
       }
       if (opath) {
-        svg += `">`;
+        svg += `" />`;
       }
       opath = false;
     } else {
@@ -92,9 +92,9 @@ CurveDrawingApparatus.prototype.printScreen = function() {
       opath = true;
     }
   }
-  
+
   if (opath) {
-    svg += `">`;
+    svg += `" />`;
   }
   svg += `</svg>`;
   return svg;

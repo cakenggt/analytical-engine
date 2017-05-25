@@ -54,20 +54,18 @@ Interface.prototype.clearState = function() {
 
 Interface.prototype.submitProgram = function(cards) {
 	this.program = new Program.Program(cards, this.attendant, this.cardReader, this.store, this.curveDrawingApparatus, this.timing, this.engine);
+	return this.program.submit();
 }
 
 Interface.prototype.runToCompletion = function() {
-	let stat = this.program.submit();
-	if (stat === 0) {
-		//library loads gave no errors, run the program
-		this.annunciator.setOverride(true);
-		this.engine.start();
-		this.annunciator.setOverride(false);
-		while(this.engine.processCard()) {}
-		this.annunciator.setOverride(true);
-		this.engine.halt();
-		this.annunciator.setOverride(false);
-	}
+	//library loads gave no errors, run the program
+	this.annunciator.setOverride(true);
+	this.engine.start();
+	this.annunciator.setOverride(false);
+	while(this.engine.processCard()) {}
+	this.annunciator.setOverride(true);
+	this.engine.halt();
+	this.annunciator.setOverride(false);
 }
 
 exports.Interface = Interface;

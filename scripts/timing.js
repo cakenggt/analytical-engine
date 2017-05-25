@@ -129,26 +129,26 @@ Timing.prototype.millOperation = function(which, arg) {
 Timing.prototype.report = function() {
   var s = "", i;
 
-  s += "Cards read: " + commas(this.cardsProcessed) + "\n";
-  s += "    Advanced:  " + commas(this.cardsAdvance) + "\n";
-  s += "    Backed:    " + commas(this.cardsBack) + "\n";
+  s += "Cards read: " + definitions.commas(this.cardsProcessed) + "\n";
+  s += "    Advanced:  " + definitions.commas(this.cardsAdvance) + "\n";
+  s += "    Backed:    " + definitions.commas(this.cardsBack) + "\n";
 
-  s += "Mill operations: " + commas(this.millOperations) + "\n";
+  s += "Mill operations: " + definitions.commas(this.millOperations) + "\n";
   for (i = 1; i < this.millOp.length; i++) {
-    s += "    " + tiMillOp[i] + "  " + commas(this.millOp[i]) + "\n";
+    s += "    " + tiMillOp[i] + "  " + definitions.commas(this.millOp[i]) + "\n";
   }
 
-  s += "Store operations: " + commas(this.storeOperations) + "\n";
-  s += "    Put:  " + commas(this.storeOpPut) + "\n";
-  s += "    Get:  " + commas(this.storeOpGet) + "\n";
-  s += "    Slew: " + commas(this.storeSlewCol) + " columns\n";
+  s += "Store operations: " + definitions.commas(this.storeOperations) + "\n";
+  s += "    Put:  " + definitions.commas(this.storeOpPut) + "\n";
+  s += "    Get:  " + definitions.commas(this.storeOpGet) + "\n";
+  s += "    Slew: " + definitions.commas(this.storeSlewCol) + " columns\n";
 
   var days = Math.floor(this.runTime / (24 * 60 * 60)),
     secs = Math.floor(this.runTime % (24 * 60 * 60));
   var d = new Date(secs * 1000);
   s +=
     "Total running time: " +
-    commas(Math.round(this.runTime)) +
+    definitions.commas(Math.round(this.runTime)) +
     " seconds (" +
     (days > 0 ? days + " days " : "") +
     d.toISOString().substr(11, 8) +
