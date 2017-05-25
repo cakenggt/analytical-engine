@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const bigInt = require("big-integer");
 
+const definitions = require('./definitions');
 const Program = require('./program');
 const CardSource = Program.CardSource;
 const Card = Program.Card;
@@ -435,10 +436,10 @@ Attendant.prototype.expandLibraryRequests = function(start) {
         this.libLoadI = i;
         this.libLoadStatus = 1;
         try {
-          var text = fs.readFileSync(path.join(__dirname, '..', url), {
+          var text = fs.readFileSync(path.resolve(__dirname, '..', url), {
             encoding: "utf8"
           });
-          var lines = text.split("\n");
+          var lines = text.replace(/\r\n/g, '\n').split("\n");
           this.cardChain.splice(
             this.libLoadI,
             1,
@@ -476,7 +477,6 @@ Attendant.prototype.expandLibraryRequests = function(start) {
           );
           this.libLoadStatus = 2; // Mark library load failed
         }
-        break; // Quit loop to wait for callback
       } else {
         this.complain(
           this.cardChain[i],
@@ -488,14 +488,14 @@ Attendant.prototype.expandLibraryRequests = function(start) {
       }
     } else if (this.cardChain[i].text.match(/^a include cards /i)) {
       this.lspec = this.cardChain[i].text.substr(16);
-      var url = this.lspec;
+      var url = '$.ae'.replace(/\$/, this.lspec);
       this.libLoadI = i;
       this.libLoadStatus = 1;
       try {
-        var text = fs.readFileSync(path.join('.', url), {
+        var text = fs.readFileSync(path.resolve('.', url), {
           encoding: "utf8"
         });
-        var lines = text.split("\n");
+        var lines = text.replace(/\r\n/g, '\n').split("\n");
         this.cardChain.splice(
           this.libLoadI,
           1,
@@ -533,7 +533,6 @@ Attendant.prototype.expandLibraryRequests = function(start) {
         );
         this.libLoadStatus = 2; // Mark library load failed
       }
-      break; // Quit loop to wait for callback
     }
   }
   return this.libLoadStatus;
@@ -647,7 +646,7 @@ Attendant.prototype.editToPicture = function(v) {
           }
           break;
 
-        case C_plusmn: // Plus or minus sign
+        case definitions.C_plusmn: // Plus or minus sign
           o = (negative ? "-" : "+") + o;
           sign = true;
           break;

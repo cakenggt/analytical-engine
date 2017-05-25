@@ -65,7 +65,7 @@ test('custom function test', (t) => {
 	t.plan(1);
 
 	let cards = `N000 4
-A include cards test/addtwo.ae`;
+A include cards test/addtwo`;
 
 	eng.clearState();
 	eng.submitProgram(cards);
@@ -123,4 +123,57 @@ L0
 	eng.runToCompletion();
 
 	t.equal(eng.store.get(1).value, 5040);
+});
+
+test('drawing test', (t) => {
+	t.plan(2);
+
+	let emptySvg = '<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg"></svg>';
+
+	let cards = `        Iteration variable
+N000 −10000000000000000000000000
+
+        Step
+N001 100000000000000000000000
+
+        Number of steps
+N002    201
+
+        Constants
+N003    1
+N004    0
+
++
+L000
+DX
+×
+L000
+L000
+>25
+S005
+L000
+L005
+>25
+DY
+D+
++
+L000
+L001
+S000
+−
+L002
+L003
+S002
+L004
+L002
+CB?24`;
+
+	eng.clearState();
+
+	t.equal(eng.curveDrawingApparatus.printScreen(), emptySvg);
+
+	eng.submitProgram(cards);
+	eng.runToCompletion();
+
+	t.notEqual(eng.curveDrawingApparatus.printScreen(), emptySvg);
 });

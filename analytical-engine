@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+
+const path = require('path');
+const fs = require('fs');
+
+const AE = require('./index');
+const argv = require('yargs')
+	.usage('Usage: $0 filename')
+	.demandCommand(1)
+	.argv;
+
+try {
+	const cards = fs.readFileSync(path.resolve('.', argv._[0]), {
+		encoding: "utf8"
+	});
+
+	var eng = new AE.Interface();
+	eng.submitProgram(cards);
+	eng.runToCompletion();
+
+	console.log(`Attendant's Log:\n${eng.annunciator.L_output}`);
+	console.log(`Printer:\n${eng.printer.O_output}`);
+	console.log(`Curve Drawing Apparatus:\n${eng.curveDrawingApparatus.printScreen()}`);
+} catch (e) {
+	console.error(`Could not read file due to error: ${e}`);
+}

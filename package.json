@@ -1,15 +1,17 @@
 {
-  "name": "analytic-engine",
+  "name": "analytical-engine",
   "version": "0.0.1",
   "description": "Babbage's Analytic Engine emulator",
   "main": "index.js",
   "scripts": {
     "test": "node test/test.js"
   },
+  "bin": "./analytical-engine",
   "author": "Alec Lownes and John Walker",
   "license": "ISC",
   "dependencies": {
-    "big-integer": "^1.6.22"
+    "big-integer": "^1.6.22",
+    "yargs": "^8.0.1"
   },
   "devDependencies": {
     "tape": "^4.6.3"

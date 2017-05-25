@@ -29,7 +29,7 @@ function Interface() {
 	this.printer = new Printer();
 
 	//  Curve Drawing Apparatus
-	this.curveDrawingApparatus = new CurveDrawingApparatus();
+	this.curveDrawingApparatus = new CurveDrawingApparatus(512, 512);
 
 	//  Attendant
 	this.attendant = new Attendant(this.annunciator, this.timing);
@@ -53,18 +53,21 @@ Interface.prototype.clearState = function() {
 }
 
 Interface.prototype.submitProgram = function(cards) {
-	this.prog = new Program.Program(cards, this.attendant, this.cardReader, this.store, this.curveDrawingApparatus, this.timing, this.engine);
+	this.program = new Program.Program(cards, this.attendant, this.cardReader, this.store, this.curveDrawingApparatus, this.timing, this.engine);
 }
 
 Interface.prototype.runToCompletion = function() {
-	this.prog.submit();
-	this.annunciator.setOverride(true);
-	this.engine.start();
-	this.annunciator.setOverride(false);
-	while(this.engine.processCard()) {}
-	this.annunciator.setOverride(true);
-	this.engine.halt();
-	this.annunciator.setOverride(false);
+	let stat = this.program.submit();
+	if (stat === 0) {
+		//library loads gave no errors, run the program
+		this.annunciator.setOverride(true);
+		this.engine.start();
+		this.annunciator.setOverride(false);
+		while(this.engine.processCard()) {}
+		this.annunciator.setOverride(true);
+		this.engine.halt();
+		this.annunciator.setOverride(false);
+	}
 }
 
 exports.Interface = Interface;

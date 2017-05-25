@@ -51,7 +51,7 @@ Program.prototype.submit1 = function(comments) {
         the card chain. */
 Program.prototype.submit = function(comments) {
   this.attendant.newCardChain();
-  var lines = this.cards.split("\n");
+  var lines = this.cards.replace(/\r\n/g, '\n').split("\n");
   for (var i = 0; i < lines.length; i++) {
     this.attendant.appendCard(lines[i], "Analyst", 0);
   }
