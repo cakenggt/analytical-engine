@@ -18,8 +18,8 @@ try {
 	eng.submitProgram(cards);
 	eng.runToCompletion();
 
-	console.log(`Attendant's Log:\n${eng.annunciator.L_output}`);
-	console.log(`Printer:\n${eng.printer.O_output}`);
+	console.log(`Attendant's Log:\n${eng.annunciator.L_output}\n`);
+	console.log(`Printer:\n${eng.printer.O_output}\n`);
 	console.log(`Curve Drawing Apparatus:\n${eng.curveDrawingApparatus.printScreen()}`);
 } catch (e) {
 	console.error(`Could not read file due to error: ${e}`);
