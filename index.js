@@ -50,6 +50,7 @@ function Interface() {
 
 Interface.prototype.clearState = function() {
 	this.engine.commence();
+	this.timing.reset();
 }
 
 Interface.prototype.submitProgram = function(cards) {
