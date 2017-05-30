@@ -6,7 +6,9 @@
   "scripts": {
     "test": "ava"
   },
-  "bin": "./analytical-engine",
+  "bin": {
+    "analytical-engine": "./analytical-engine"
+  },
   "author": "Alec Lownes and John Walker",
   "license": "ISC",
   "dependencies": {
@@ -15,5 +17,20 @@
   },
   "devDependencies": {
     "ava": "^0.19.1"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cakenggt/analytical-engine.git"
+  },
+  "keywords": [
+    "analytical-engine",
+    "babbage"
+  ],
+  "bugs": {
+    "url": "https://github.com/cakenggt/analytical-engine/issues"
+  },
+  "homepage": "https://github.com/cakenggt/analytical-engine#readme"
 }
