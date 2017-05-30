@@ -90,4 +90,4 @@ After the program is finished executing, it will print out the contents of the A
 
 ## Analytical Engine Language for Atom
 
-Now is as good a time as any to plug my work on a very simple package which provides Analytical Engine language support for the Atom text editor.
+Now is as good a time as any to plug my work on a very simple package which provides Analytical Engine language support for the Atom text editor, [language-analytical-engine](https://atom.io/packages/language-analytical-engine).
