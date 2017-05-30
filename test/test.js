@@ -1,12 +1,11 @@
-const test = require('tape');
+const test = require('ava');
 
 const AE = require('../index');
 
-var eng = new AE.Interface();
-
-test('clear state test', (t) => {
+test('clear state test', async t => {
 	t.plan(6);
 
+	let eng = new AE.Interface();
 	let cards = `N000 1
 N001 2
 +
@@ -14,26 +13,26 @@ L000
 L001
 S002`;
 
-	eng.clearState();
 	eng.submitProgram(cards);
 	eng.runToCompletion();
 
 	// before state is cleared
-	t.equal(eng.store.get(2).value, 3);
-	t.equal(eng.mill.egress[0].value, 3);
-	t.notEqual(eng.mill.operation, 0);
+	t.is(eng.store.get(2).value, 3);
+	t.is(eng.mill.egress[0].value, 3);
+	t.not(eng.mill.operation, 0);
 
 	eng.clearState();
 
 	// after state is cleared
-	t.equal(eng.store.get(2).value, 0);
-	t.equal(eng.mill.egress[0].value, 0);
-	t.equal(eng.mill.operation, 0);
+	t.is(eng.store.get(2).value, 0);
+	t.is(eng.mill.egress[0].value, 0);
+	t.is(eng.mill.operation, 0);
 });
 
-test('addition test', (t) => {
+test('addition test', async t => {
 	t.plan(1);
 
+	let eng = new AE.Interface();
 	let cards = `N000 1
 N001 2
 +
@@ -41,42 +40,42 @@ L000
 L001
 S002`;
 
-	eng.clearState();
 	eng.submitProgram(cards);
 	eng.runToCompletion();
-	t.equal(eng.store.get(2).value, 3);
+	t.is(eng.store.get(2).value, 3);
 });
 
-test('sqrt test', (t) => {
+test('sqrt test', async t => {
 	t.plan(1);
 
+	let eng = new AE.Interface();
 	let cards = `A set decimal places to 5
 N000 4.0
 A include from library cards for sqrt`;
 
-	eng.clearState();
 	eng.submitProgram(cards);
 	eng.runToCompletion();
 
-	t.equal(eng.store.get(0).value, 200000);
+	t.is(eng.store.get(0).value, 200000);
 });
 
-test('custom function test', (t) => {
+test('custom function test', async t => {
 	t.plan(1);
 
+	let eng = new AE.Interface();
 	let cards = `N000 4
 A include cards test/addtwo`;
 
-	eng.clearState();
 	eng.submitProgram(cards);
 	eng.runToCompletion();
 
-	t.equal(eng.store.get(0).value, 6);
+	t.is(eng.store.get(0).value, 6);
 });
 
-test('combinatorial cards test', (t) => {
+test('combinatorial cards test', async t => {
 	t.plan(1);
 
+	let eng = new AE.Interface();
 	let cards = `N0 6
 N1 1
 N2 1
@@ -92,16 +91,16 @@ L2
 L0
 CB?11`;
 
-	eng.clearState();
 	eng.submitProgram(cards);
 	eng.runToCompletion();
 
-	t.equal(eng.store.get(1).value, 720);
+	t.is(eng.store.get(1).value, 720);
 });
 
-test('combinatorial cards shorthand test', (t) => {
+test('combinatorial cards shorthand test', async t => {
 	t.plan(1);
 
+	let eng = new AE.Interface();
 	let cards = `N0 7
 N1 1
 N2 1
@@ -118,16 +117,16 @@ L2
 L0
 )`;
 
-	eng.clearState();
 	eng.submitProgram(cards);
 	eng.runToCompletion();
 
-	t.equal(eng.store.get(1).value, 5040);
+	t.is(eng.store.get(1).value, 5040);
 });
 
-test('drawing test', (t) => {
+test('drawing test', async t => {
 	t.plan(2);
 
+	let eng = new AE.Interface();
 	let emptySvg = '<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg"></svg>';
 
 	let cards = `        Iteration variable
@@ -168,12 +167,10 @@ L004
 L002
 CB?24`;
 
-	eng.clearState();
-
-	t.equal(eng.curveDrawingApparatus.printScreen(), emptySvg);
+	t.is(eng.curveDrawingApparatus.printScreen(), emptySvg);
 
 	eng.submitProgram(cards);
 	eng.runToCompletion();
 
-	t.notEqual(eng.curveDrawingApparatus.printScreen(), emptySvg);
+	t.not(eng.curveDrawingApparatus.printScreen(), emptySvg);
 });
